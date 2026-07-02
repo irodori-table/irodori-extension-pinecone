@@ -46,11 +46,7 @@
       ]
     },
     "authMethods": [
-      "none",
-      "connectionString",
-      "apiKey",
-      "bearerToken",
-      "clientCertificate",
+      "pineconeApiKey",
       "customDriverOptions"
     ],
     "tls": "optional",

@@ -128,30 +128,8 @@
           ],
           "authMethods": [
             {
-              "id": "none",
-              "label": "No authentication",
-              "kind": "none",
-              "secretPurposes": [],
-              "fields": []
-            },
-            {
-              "id": "connectionString",
-              "label": "Connection string / DSN",
-              "kind": "connectionString",
-              "secretPurposes": [],
-              "fields": [
-                {
-                  "id": "url",
-                  "label": "Connection URL or DSN",
-                  "type": "uri",
-                  "profileField": "url",
-                  "required": true
-                }
-              ]
-            },
-            {
               "id": "apiKey",
-              "label": "API key",
+              "label": "Pinecone API key",
               "kind": "apiKey",
               "secretPurposes": [
                 "token"
@@ -161,51 +139,8 @@
                   "id": "apiKey",
                   "label": "API key",
                   "type": "secret",
-                  "secretPurpose": "token"
-                }
-              ]
-            },
-            {
-              "id": "bearerToken",
-              "label": "Bearer token",
-              "kind": "token",
-              "secretPurposes": [
-                "token"
-              ],
-              "fields": [
-                {
-                  "id": "token",
-                  "label": "Token",
-                  "type": "secret",
-                  "secretPurpose": "token"
-                }
-              ]
-            },
-            {
-              "id": "clientCertificate",
-              "label": "Client certificate / mTLS",
-              "kind": "certificate",
-              "secretPurposes": [
-                "privateKey",
-                "privateKeyPassphrase"
-              ],
-              "fields": [
-                {
-                  "id": "clientCertificate",
-                  "label": "Client certificate",
-                  "type": "pem"
-                },
-                {
-                  "id": "clientPrivateKey",
-                  "label": "Client private key",
-                  "type": "pem",
-                  "secretPurpose": "privateKey"
-                },
-                {
-                  "id": "clientPrivateKeyPassphrase",
-                  "label": "Private key passphrase",
-                  "type": "secret",
-                  "secretPurpose": "privateKeyPassphrase"
+                  "secretPurpose": "token",
+                  "required": true
                 }
               ]
             },
@@ -231,9 +166,9 @@
           ],
           "secretPurposes": [
             "token",
+            "password",
             "privateKey",
-            "privateKeyPassphrase",
-            "password"
+            "privateKeyPassphrase"
           ],
           "tls": {
             "supported": true,
