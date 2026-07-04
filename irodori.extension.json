@@ -3,7 +3,7 @@
   "manifestVersion": 1,
   "id": "irodori.pinecone",
   "name": "Pinecone Connector",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "irodori",
   "description": "Pinecone Connector contributes the Pinecone database connector through the native connector ABI.",
   "license": "MIT OR 0BSD",
@@ -327,7 +327,7 @@
               "label": "Pinecone index stats",
               "language": "text",
               "description": "Inspect namespaces, dimensions, and vector counts.",
-              "insertText": "describe_index_stats(namespace=$namespace)",
+              "insertText": "POST /describe_index_stats\n{}",
               "parameters": [
                 {
                   "id": "namespace",
