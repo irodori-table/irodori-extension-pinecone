@@ -371,7 +371,7 @@
   },
   "source": {
     "marketplaceId": "irodori.pinecone",
-    "repository": "https://github.com/hjosugi/irodori-extension-pinecone",
+    "repository": "https://github.com/irodori-table/irodori-extension-pinecone",
     "knowledgeEngineStatus": "recognized_no_connector",
     "adapter": null,
     "adapterSha256": null,
