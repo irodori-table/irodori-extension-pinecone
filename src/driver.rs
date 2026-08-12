@@ -215,7 +215,14 @@ impl PineconeConfig {
     fn from_request(request: &Value) -> Result<Self, String> {
         let base_url = option_string(request, &["connectionString", "url", "dsn", "endpoint"])
             .unwrap_or_else(|| "https://api.pinecone.io".to_string());
-        let api_key = option_string(request, &["apiKey", "api_key"]);
+        // The desktop form labels the password field "API key / token" for this
+        // engine, so a key typed there arrives as `password`. Resolve it in a
+        // second pass rather than appending to the list above: `option_string`
+        // scans container-first, and `password` sits in the profile container
+        // while an explicit `apiKey` usually sits in `options` — one combined
+        // list would let a stale password shadow the explicit option.
+        let api_key = option_string(request, &["apiKey", "api_key"])
+            .or_else(|| option_string(request, &["password"]));
         let bearer_token = option_string(request, &["token", "bearerToken", "accessToken"]);
         let mut redaction_values = Vec::new();
         push_sensitive(&mut redaction_values, api_key.as_deref());
@@ -474,5 +481,43 @@ mod tests {
         .unwrap();
         assert_eq!(config.base_url, "https://index-host.pinecone.io");
         assert_eq!(config.api_key.as_deref(), Some("secret"));
+    }
+
+    #[test]
+    fn takes_the_api_key_from_the_password_field() {
+        // The connection form labels `password` "API key / token" for pinecone,
+        // so this is the shape a profile filled in through the UI arrives as.
+        let config = PineconeConfig::from_request(&json!({
+            "profile": {
+                "endpoint": "https://index-host.pinecone.io",
+                "password": "pcsk_from_the_form"
+            }
+        }))
+        .unwrap();
+        assert_eq!(config.api_key.as_deref(), Some("pcsk_from_the_form"));
+    }
+
+    #[test]
+    fn explicit_api_key_option_wins_over_password() {
+        let config = PineconeConfig::from_request(&json!({
+            "profile": {
+                "password": "stale",
+                "options": { "apiKey": "explicit" }
+            }
+        }))
+        .unwrap();
+        assert_eq!(config.api_key.as_deref(), Some("explicit"));
+    }
+
+    #[test]
+    fn redacts_an_api_key_taken_from_the_password_field() {
+        let config = PineconeConfig::from_request(&json!({
+            "profile": { "password": "pcsk_secret" }
+        }))
+        .unwrap();
+        assert_eq!(
+            config.redact("rejected key pcsk_secret"),
+            "rejected key ****"
+        );
     }
 }
